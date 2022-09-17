@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hungryfood/address.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
+import 'package:hungryfood/helpers/custombottompage.dart';
+import 'package:hungryfood/payment.dart';
 import 'package:hungryfood/views/applycupon.dart';
 import 'package:hungryfood/views/homepage.dart';
 
@@ -298,7 +300,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                   ),
                   IconButton(
                     onPressed: () {
-                      Get.offAll(() => const HomePage());
+                      Get.offAll(() => const CustomBottomBar());
                     },
                     icon: const Icon(Icons.home_filled),
                     iconSize: 30,
@@ -324,7 +326,9 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => const PaymentScreen());
+                    },
                     child: Container(
                       width: 100,
                       height: 20,

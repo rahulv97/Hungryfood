@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hungryfood/helpers/colorHelper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../onBoardingPages/onBoardingPage.dart';
 
 class SideBarScreen extends StatefulWidget {
   const SideBarScreen({Key? key}) : super(key: key);
@@ -10,113 +15,96 @@ class SideBarScreen extends StatefulWidget {
 class _SideBarScreenState extends State<SideBarScreen> {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height / 5,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                // ignore: prefer_const_literals_to_create_immutables
-                children: [
-                  const CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.transparent,
-                    child: Image(
-                      image: AssetImage("assets/a.jpg"),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, left: 20),
-            child: Row(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                const SizedBox(width: 10),
-                const Text(
-                  "Manage by Account",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                  ),
+    return SafeArea(
+      child: Drawer(
+        width: MediaQuery.of(context).size.width / 1.5,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 30),
+              const Center(
+                child: Image(
+                  image: AssetImage("assets/logo.png"),
+                  height: 80,
                 ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, left: 20),
-            child: Row(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                const SizedBox(width: 10),
-                const Text(
-                  "My Order",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, left: 20),
-            child: Row(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                const SizedBox(width: 10),
-                const Text(
-                  "Address",
-                  style: TextStyle(color: Colors.black, fontSize: 17),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, left: 20),
-            child: Row(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                const SizedBox(width: 10),
-                const Text(
-                  "Saved Store",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, left: 20),
-            child: Row(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                const SizedBox(width: 10),
-                const Text(
+              ),
+              Divider(
+                color: textfielgbgColor,
+                thickness: 1,
+              ),
+              const SizedBox(height: 30),
+              Text(
+                "Manneged by Account",
+                style: TextStyle(
+                  fontSize: 16,
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.bold,
+                  color: black.withOpacity(0.5),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Text(
+                "My Order",
+                style: TextStyle(
+                  fontSize: 16,
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.bold,
+                  color: black.withOpacity(0.5),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Text(
+                "Address",
+                style: TextStyle(
+                  fontSize: 16,
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.bold,
+                  color: black.withOpacity(0.5),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Text(
+                "Saved Stores",
+                style: TextStyle(
+                  fontSize: 16,
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.bold,
+                  color: black.withOpacity(0.5),
+                ),
+              ),
+              const SizedBox(height: 30),
+              GestureDetector(
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.setBool('showHome', false);
+                  Get.offAll(() => const OnBoardingPage());
+                },
+                child: Text(
                   "Logout",
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
+                    fontSize: 16,
+                    letterSpacing: 1,
+                    fontWeight: FontWeight.bold,
+                    color: black.withOpacity(0.5),
                   ),
-                )
-              ],
-            ),
+                ),
+              ),
+              const Spacer(),
+              Text(
+                "Lieferlein.de",
+                style: TextStyle(
+                  fontSize: 26,
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.w600,
+                  color: logoColor,
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
           ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(right: 80, bottom: 20),
-            child: Text(
-              "Lieferlein.de",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

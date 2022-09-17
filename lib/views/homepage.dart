@@ -82,16 +82,6 @@ class _HomePageState extends State<HomePage> {
                     color: black,
                   ),
                 ),
-                const SizedBox(width: 10),
-                IconButton(
-                  onPressed: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    prefs.setBool('showHome', false);
-                    Get.offAll(() => const OnBoardingPage());
-                  },
-                  icon: const Icon(Icons.logout),
-                  color: black,
-                )
               ],
             ),
           ),

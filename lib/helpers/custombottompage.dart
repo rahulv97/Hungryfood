@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
+import 'package:hungryfood/views/account.dart';
 import 'package:hungryfood/views/cartscreen.dart';
-import 'package:hungryfood/views/drawer/drawer.dart';
 import 'package:hungryfood/views/homepage.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -20,7 +20,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
       const HomePage(),
       const ViewCartScreen(),
       const HomePage(),
-      const SideBarScreen(),
+      const AccountScreen(),
     ];
   }
 
@@ -44,8 +44,8 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
           color: white,
         ),
         title: ("Cart"),
-        activeColorPrimary: logoColor,
-        inactiveColorPrimary: logoColor,
+        activeColorPrimary: primaryColor,
+        inactiveColorPrimary: textfielgbgColor,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.bookmark),
@@ -54,10 +54,6 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
         inactiveColorPrimary: textfielgbgColor,
       ),
       PersistentBottomNavBarItem(
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(),
-        onPressed: (p0) {
-          Scaffold.of(context).openDrawer();
-        },
         icon: const Icon(Icons.menu),
         title: ("Menu"),
         activeColorPrimary: primaryColor,
@@ -66,7 +62,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
     ];
   }
 
-  late PersistentTabController _controller =
+  late final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
   @override

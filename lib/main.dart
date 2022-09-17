@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hungryfood/views/auth/login.dart';
 import 'package:hungryfood/views/onBoardingPages/onBoardingPage.dart';
-import 'package:hungryfood/views/resturantfooddetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
       ),
       home: showHome ? const LoginScreen() : const OnBoardingPage(),
 
-      // home: const RestutrantFoodListScreen(),
+      // home: PaymentScreen(),
     );
   }
 }
