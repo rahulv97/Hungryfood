@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:hungryfood/address.dart';
+import 'package:hungryfood/views/address/address.dart';
 
-import '../helpers/colorHelper.dart';
+import '../../helpers/colorHelper.dart';
 
 class AddNewAddress extends StatefulWidget {
   const AddNewAddress({Key? key}) : super(key: key);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hungryfood/views/address/address.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,13 +56,18 @@ class _SideBarScreenState extends State<SideBarScreen> {
                 ),
               ),
               const SizedBox(height: 30),
-              Text(
-                "Address",
-                style: TextStyle(
-                  fontSize: 16,
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.bold,
-                  color: black.withOpacity(0.5),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => AddressScreen());
+                },
+                child: Text(
+                  "Address",
+                  style: TextStyle(
+                    fontSize: 16,
+                    letterSpacing: 1,
+                    fontWeight: FontWeight.bold,
+                    color: black.withOpacity(0.5),
+                  ),
                 ),
               ),
               const SizedBox(height: 30),
@@ -101,7 +107,7 @@ class _SideBarScreenState extends State<SideBarScreen> {
                   color: logoColor,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 40),
             ],
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:hungryfood/views/account.dart';
 import 'package:hungryfood/views/cartscreen.dart';
 import 'package:hungryfood/views/homepage.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'dart:io';
 
 class CustomBottomBar extends StatefulWidget {
   const CustomBottomBar({Key? key}) : super(key: key);
@@ -64,6 +65,31 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
 
   late final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
+
+  // var barIndex;
+
+  // Future<bool> _onBackPressed() async {
+  //   return await showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       content: Text("Are you sure want to exit?"),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () {
+  //             exit(0);
+  //           },
+  //           child: Text("Yes"),
+  //         ),
+  //         TextButton(
+  //           onPressed: () {
+  //             Navigator.pop(context);
+  //           },
+  //           child: Text("No"),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

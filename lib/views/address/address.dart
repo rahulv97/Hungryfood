@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
-import 'package:hungryfood/views/addnewaddress.dart';
+import 'package:hungryfood/views/address/addnewaddress.dart';
 
 class AddressScreen extends StatefulWidget {
   const AddressScreen({Key? key}) : super(key: key);

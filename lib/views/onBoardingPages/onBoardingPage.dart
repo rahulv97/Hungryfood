@@ -1,7 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
+import 'package:hungryfood/helpers/custombottompage.dart';
 import 'package:hungryfood/views/auth/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -157,12 +159,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         onPressed: () async {
                           final pref = await SharedPreferences.getInstance();
                           pref.setBool('showHome', true);
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
-                            ),
+                          Get.off(
+                            () => const CustomBottomBar(),
                           );
                         },
                         child: Container(

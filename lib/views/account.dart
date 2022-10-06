@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hungryfood/views/networks/api_constant.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
+import 'package:hungryfood/views/networks/http_request.dart';
 import 'package:hungryfood/views/drawer/drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -399,25 +401,33 @@ class _AccountScreenState extends State<AccountScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.logout,
-                                  color: black.withOpacity(0.5),
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  "Logout",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    letterSpacing: 1,
+                          GestureDetector(
+                            onTap: () async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setBool('showHome', false);
+                              Get.offAll(() => const OnBoardingPage());
+                            },
+                            child: SizedBox(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.logout,
                                     color: black.withOpacity(0.5),
-                                    fontWeight: FontWeight.w600,
+                                    size: 20,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    "Logout",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      letterSpacing: 1,
+                                      color: black.withOpacity(0.5),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           IconButton(

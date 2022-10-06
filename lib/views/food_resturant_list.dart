@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hungryfood/controllers/similarfoodresturant_Controller.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
 import 'package:like_button/like_button.dart';
 
-import 'resturantfooddetails.dart';
+import 'networks/api_provider.dart';
+import 'resturantfooddetails/resturantfooddetails.dart';
 
 class FoodResturantScreen extends StatefulWidget {
   const FoodResturantScreen({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "All Resturent Delivery Food",
+          "All Nearby Resturants",
           style: TextStyle(
             fontWeight: FontWeight.w500,
             letterSpacing: 1,
@@ -74,9 +74,7 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.only(bottom: 160),
                   child: ListView.builder(
-                    itemCount: SimilarFoodResturantrController()
-                        .similarfoodresturantlist
-                        .length,
+                    itemCount: similarfoodresturantlist.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, index) {
                       return Stack(
@@ -103,8 +101,29 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          Get.to(() =>
-                                              const RestutrantFoodListScreen());
+                                          Get.to(
+                                            () => RestutrantFoodListScreen(
+                                              logo: similarfoodresturantlist[
+                                                      index]
+                                                  .image
+                                                  .toString(),
+                                              rating: int.parse(
+                                                  similarfoodresturantlist[
+                                                          index]
+                                                      .rating
+                                                      .toString()),
+                                              resturantname:
+                                                  similarfoodresturantlist[
+                                                          index]
+                                                      .resturnatName
+                                                      .toString(),
+                                              merchantId: int.parse(
+                                                similarfoodresturantlist[index]
+                                                    .merchatId
+                                                    .toString(),
+                                              ),
+                                            ),
+                                          );
                                         },
                                         child: Container(
                                           height: MediaQuery.of(context)
@@ -116,9 +135,8 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                             image: DecorationImage(
-                                              image: AssetImage(
-                                                  "${SimilarFoodResturantrController().similarfoodresturantlist[index].image}"),
-                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  "${similarfoodresturantlist[index].image}"),
                                             ),
                                           ),
                                           child: Padding(
@@ -127,7 +145,7 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                                               alignment: Alignment.bottomRight,
                                               child: Container(
                                                 height: 25,
-                                                width: 90,
+                                                width: 100,
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(8),
@@ -139,7 +157,7 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                                                           .spaceAround,
                                                   children: [
                                                     Text(
-                                                      "${SimilarFoodResturantrController().similarfoodresturantlist[index].time}",
+                                                      "${similarfoodresturantlist[index].time}",
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         color: black,
@@ -151,7 +169,8 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                                                       color: black,
                                                     ),
                                                     Text(
-                                                      "${SimilarFoodResturantrController().similarfoodresturantlist[index].distance}",
+                                                      "${double.parse(similarfoodresturantlist[index].distance.toString()).round()}" +
+                                                          ' Km',
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         color: black,
@@ -205,7 +224,7 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "${SimilarFoodResturantrController().similarfoodresturantlist[index].resturnatName}",
+                                          "${similarfoodresturantlist[index].resturnatName}",
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500,
@@ -225,7 +244,7 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                                           child: Row(
                                             children: [
                                               Text(
-                                                "${SimilarFoodResturantrController().similarfoodresturantlist[index].rating}",
+                                                "${similarfoodresturantlist[index].rating}",
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w600,
@@ -248,7 +267,7 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                                     padding: const EdgeInsets.only(
                                         left: 20, bottom: 10),
                                     child: Text(
-                                      "${SimilarFoodResturantrController().similarfoodresturantlist[index].foodaddress}",
+                                      "${similarfoodresturantlist[index].cuisine}",
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,

@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hungryfood/address.dart';
+import 'package:hungryfood/views/address/address.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
 import 'package:hungryfood/helpers/custombottompage.dart';
 import 'package:hungryfood/payment.dart';
 import 'package:hungryfood/views/applycupon.dart';
-import 'package:hungryfood/views/homepage.dart';
 
 class ViewCartScreen extends StatefulWidget {
   const ViewCartScreen({Key? key}) : super(key: key);

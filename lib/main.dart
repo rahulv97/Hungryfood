@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:hungryfood/views/auth/login.dart';
+import 'package:hungryfood/helpers/custombottompage.dart';
 import 'package:hungryfood/views/onBoardingPages/onBoardingPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,25 +24,18 @@ class MyApp extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: showHome ? const LoginScreen() : const OnBoardingPage(),
+      home: showHome ? const CustomBottomBar() : const OnBoardingPage(),
 
-      // home: PaymentScreen(),
+      // home: TestingPage(),
     );
   }
 }
-
-
-//  actions: [
-            // IconButton(
-            //     onPressed: () async {
-            //       final prefs = await SharedPreferences.getInstance();
-            //       prefs.setBool('showHome', false);
-            //       Get.offAll(() => const OnBoardingPage());
-            //     },
-            //     icon: const Icon(Icons.logout))
-//           ],
