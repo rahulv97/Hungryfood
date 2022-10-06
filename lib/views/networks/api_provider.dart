@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api_constant.dart';
 import 'http_request.dart';
@@ -80,20 +81,20 @@ class ApiProvider {
       'YII_CSRF_TOKEN':
           'MVhvWmltTnRVY1FzTUVMb1RGQnBWcEdCTTYyazZGMGxIvxpxNjovK4-kr_5f_OGYzN8wZ2f8NtDlCmo9POieVw==',
     }).then((value) {
-      // ignore: unused_local_variable
-
       Map<dynamic, dynamic> map = jsonDecode(value);
 
-      var items = "";
-      print(map["details"]["data"]["items"].toString());
+      List cat = map["details"]["data"]["category"];
 
-      Map<dynamic, dynamic> map1 =
-          jsonDecode(map["details"]["data"]["items"].toString());
+      List itemID = [];
 
-      Map b = map1;
+      for (var items in cat) {
+        itemID.addAll(items["items"]);
+      }
 
-      for (int i = 0; i < b.length; i++) {
-        print(b.toString());
+      for (String it in itemID) {
+        //Make Model and then save all items data in list
+        String itg = map["details"]["data"]["items"][it]["item_name"].toString();
+        print(itg);
       }
     });
   }
