@@ -1,15 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
-import 'package:hungryfood/models/similarfoodresturantModel.dart';
 import 'package:hungryfood/views/auth/login.dart';
 import 'package:hungryfood/views/food_resturant_list.dart';
 import 'package:hungryfood/views/location/location.dart';
-import 'package:hungryfood/views/resturantfooddetails/resturantfooddetails.dart';
 import 'package:like_button/like_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';
 import 'networks/api_provider.dart';
+import 'resturantfooddetails/resturantfooddetails.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -446,6 +445,11 @@ class _HomePageState extends State<HomePage> {
                                                           .merchatId
                                                           .toString(),
                                                     ),
+                                                    headerimage:
+                                                        similarfoodresturantlist[
+                                                                index]
+                                                            .headerImage
+                                                            .toString(),
                                                   ),
                                                 );
                                               },
@@ -455,12 +459,12 @@ class _HomePageState extends State<HomePage> {
                                                         .height /
                                                     6,
                                                 decoration: BoxDecoration(
-                                                  color: logoColor,
                                                   borderRadius:
                                                       BorderRadius.circular(15),
                                                   image: DecorationImage(
                                                     image: NetworkImage(
                                                         "${similarfoodresturantlist[index].image}"),
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                                 child: Padding(
@@ -561,7 +565,6 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               Container(
                                                 height: 20,
-                                                // width: 50,
                                                 decoration: BoxDecoration(
                                                   color: ratingbarColor,
                                                   borderRadius:
@@ -594,14 +597,14 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         const SizedBox(height: 5),
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 20),
+                                          padding: const EdgeInsets.only(
+                                              left: 20, bottom: 5),
                                           child: Text(
                                             "${similarfoodresturantlist[index].cuisine}",
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600,
-                                              color: hinttextColor,
+                                              color: black.withOpacity(0.4),
                                             ),
                                           ),
                                         ),

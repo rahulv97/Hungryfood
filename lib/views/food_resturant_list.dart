@@ -118,10 +118,15 @@ class _FoodResturantScreenState extends State<FoodResturantScreen> {
                                                       .resturnatName
                                                       .toString(),
                                               merchantId: int.parse(
-                                                similarfoodresturantlist[index]
-                                                    .merchatId
-                                                    .toString(),
-                                              ),
+                                                  similarfoodresturantlist[
+                                                          index]
+                                                      .merchatId
+                                                      .toString()),
+                                              headerimage:
+                                                  similarfoodresturantlist[
+                                                          index]
+                                                      .headerImage
+                                                      .toString(),
                                             ),
                                           );
                                         },

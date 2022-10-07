@@ -6,12 +6,14 @@ class FoodItemModel {
   String? price;
   String? details;
   String? discountPrice;
+  String? discountType;
 
   FoodItemModel({
-    required this.image,
+    this.image,
     required this.foodName,
     required this.price,
     this.discountPrice,
     required this.details,
+    required this.discountType,
   });
 }

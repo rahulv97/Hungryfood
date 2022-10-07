@@ -10,6 +10,7 @@ class SimilarFoodResturantModel {
   String? distance;
   String? rating;
   String? merchatId;
+  String? headerImage;
   SimilarFoodResturantModel({
     required this.image,
     required this.resturnatName,
@@ -18,5 +19,6 @@ class SimilarFoodResturantModel {
     required this.distance,
     required this.rating,
     required this.merchatId,
+    required this.headerImage,
   });
 }

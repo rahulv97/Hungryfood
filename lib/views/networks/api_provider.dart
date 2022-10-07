@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api_constant.dart';
 import 'http_request.dart';
@@ -8,8 +8,6 @@ import '../../models/similarfoodresturantModel.dart';
 String? locationName;
 String? locationId;
 bool resturantAdress = false;
-
-List foodList = [];
 
 List<SimilarFoodResturantModel> similarfoodresturantlist = [];
 
@@ -68,33 +66,9 @@ class ApiProvider {
             distance: r[i]["distance"],
             rating: r[i]["ratings"]["rating"].toString(),
             merchatId: r[i]["merchant_id"],
+            headerImage: r[i]['merchant_url'],
           ),
         );
-      }
-    });
-  }
-
-  void getResturantfooditems(var merchantId) {
-    ApiRequest().postRequest(
-        ApiConstant().baseUrl, ApiConstant().getresturantfooditems, {
-      'merchant_id': merchantId.toString(),
-      'YII_CSRF_TOKEN':
-          'MVhvWmltTnRVY1FzTUVMb1RGQnBWcEdCTTYyazZGMGxIvxpxNjovK4-kr_5f_OGYzN8wZ2f8NtDlCmo9POieVw==',
-    }).then((value) {
-      Map<dynamic, dynamic> map = jsonDecode(value);
-
-      List cat = map["details"]["data"]["category"];
-
-      List itemID = [];
-
-      for (var items in cat) {
-        itemID.addAll(items["items"]);
-      }
-
-      for (String it in itemID) {
-        //Make Model and then save all items data in list
-        String itg = map["details"]["data"]["items"][it]["item_name"].toString();
-        print(itg);
       }
     });
   }

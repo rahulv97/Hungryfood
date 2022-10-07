@@ -1,27 +1,29 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:get/route_manager.dart';
 import 'package:hungryfood/helpers/colorHelper.dart';
+import 'package:hungryfood/models/foodcategorymodel.dart';
+import 'package:hungryfood/models/fooditemModel.dart';
 import 'package:like_button/like_button.dart';
-
 import '../bottomsheet.dart/bottomsheet.dart';
 import '../networks/api_constant.dart';
-import '../networks/api_provider.dart';
 import '../networks/http_request.dart';
+import 'package:http/http.dart' as http;
 
 class RestutrantFoodListScreen extends StatefulWidget {
   final String logo;
   final int rating;
   final String resturantname;
   final int merchantId;
+  final String headerimage;
   const RestutrantFoodListScreen(
       {Key? key,
       required this.logo,
       required this.rating,
       required this.resturantname,
-      required this.merchantId})
+      required this.merchantId,
+      required this.headerimage})
       : super(key: key);
 
   @override
@@ -34,9 +36,13 @@ class _RestutrantFoodListScreenState extends State<RestutrantFoodListScreen> {
 
   double value = 3.5;
 
+  List<FoodItemModel> fooditemList = [];
+
+  List<FoodCategoryModel> foodList = [];
+  var body;
+
   @override
   void initState() {
-    ApiProvider().getResturantfooditems(widget.merchantId);
     ApiRequest().postRequest(
         ApiConstant().baseUrl, ApiConstant().getresturantcategories, {
       'merchant_id': widget.merchantId.toString(),
@@ -49,12 +55,80 @@ class _RestutrantFoodListScreenState extends State<RestutrantFoodListScreen> {
         Map<String, dynamic> map = jsonDecode(value);
         List a = map["details"]["data"]['category'];
         foodList.clear();
-        foodList.add("All Foods");
+        foodList.add(
+          FoodCategoryModel(
+            categoryName: 'All Foods',
+            categoryId: '-1',
+          ),
+        );
         for (int i = 0; i < a.length; i++) {
-          foodList.add(a[i]['category_name']);
+          foodList.add(
+            FoodCategoryModel(
+              categoryName: a[i]['category_name'],
+              categoryId: a[i]['cat_id'],
+            ),
+          );
         }
       });
     });
+
+    ApiRequest().postRequest(
+        ApiConstant().baseUrl, ApiConstant().getresturantfooditems, {
+      'merchant_id': widget.merchantId.toString(),
+      'YII_CSRF_TOKEN':
+          'MVhvWmltTnRVY1FzTUVMb1RGQnBWcEdCTTYyazZGMGxIvxpxNjovK4-kr_5f_OGYzN8wZ2f8NtDlCmo9POieVw==',
+    }).then((value) {
+      setState(() {
+        fooditemList.clear();
+        Map<dynamic, dynamic> map = jsonDecode(value);
+
+        List cat = map["details"]["data"]["category"];
+
+        List itemID = [];
+
+        for (var items in cat) {
+          itemID.addAll(items["items"]);
+        }
+
+        for (String it in itemID) {
+          //Make Model and then save all items data in list
+          String itg =
+              map["details"]["data"]["items"][it]["item_name"].toString();
+          print(itg);
+
+          fooditemList.add(
+            FoodItemModel(
+              image:
+                  map["details"]["data"]["items"][it]["url_image"].toString(),
+              foodName:
+                  map["details"]["data"]["items"][it]["item_name"].toString(),
+              price: map["details"]["data"]["items"][it]["price"][0]
+                      ['pretty_price_after_discount']
+                  .toString(),
+              details: map["details"]["data"]["items"][it]["item_description"]
+                  .toString(),
+              discountPrice: map["details"]["data"]["items"][it]["price"][0]
+                      ["discount"]
+                  .toString(),
+              discountType: map["details"]["data"]["items"][it]["price"][0]
+                      ["discount_type"]
+                  .toString(),
+            ),
+          );
+        }
+      });
+    });
+
+    http.get(Uri.parse(widget.headerimage)).then((value) {
+      setState(() {
+        body = value.body
+            .toString()
+            .split('background: url("')[1]
+            .split('") no-repeat center center')
+            .first;
+      });
+    });
+
     super.initState();
   }
 
@@ -83,10 +157,10 @@ class _RestutrantFoodListScreenState extends State<RestutrantFoodListScreen> {
                                 width: MediaQuery.of(context).size.width,
                                 height:
                                     MediaQuery.of(context).size.height / 3.5,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   image: DecorationImage(
-                                      image: AssetImage(
-                                        "assets/a.jpg",
+                                      image: NetworkImage(
+                                        body ?? widget.logo,
                                       ),
                                       fit: BoxFit.cover),
                                 ),
@@ -245,7 +319,89 @@ class _RestutrantFoodListScreenState extends State<RestutrantFoodListScreen> {
                                   child: Align(
                                     child: GestureDetector(
                                       onTap: () {
-                                        setState(() => _selectedIndex = index);
+                                        setState(() {
+                                          _selectedIndex = index;
+                                          var cat_id =
+                                              foodList[index].categoryId;
+                                          ApiRequest().postRequest(
+                                              ApiConstant().baseUrl,
+                                              ApiConstant()
+                                                  .getresturantfooditems,
+                                              {
+                                                'merchant_id': widget.merchantId
+                                                    .toString(),
+                                                'YII_CSRF_TOKEN':
+                                                    'MVhvWmltTnRVY1FzTUVMb1RGQnBWcEdCTTYyazZGMGxIvxpxNjovK4-kr_5f_OGYzN8wZ2f8NtDlCmo9POieVw==',
+                                              }).then((value) {
+                                            setState(() {
+                                              fooditemList.clear();
+                                              Map<dynamic, dynamic> map =
+                                                  jsonDecode(value);
+
+                                              List cat = map["details"]["data"]
+                                                  ["category"];
+
+                                              List itemID = [];
+
+                                              for (var items in cat) {
+                                                if (cat_id == items['cat_id']) {
+                                                  itemID.addAll(items["items"]);
+                                                } else if (cat_id == '-1') {
+                                                  itemID.addAll(items["items"]);
+                                                }
+                                              }
+
+                                              for (String it in itemID) {
+                                                //Make Model and then save all items data in list
+                                                String itg = map["details"]
+                                                            ["data"]["items"]
+                                                        [it]["item_name"]
+                                                    .toString();
+                                                print(itg);
+
+                                                fooditemList.add(
+                                                  FoodItemModel(
+                                                    image: map["details"]
+                                                                    ["data"]
+                                                                ["items"][it]
+                                                            ["url_image"]
+                                                        .toString(),
+                                                    foodName: map["details"]
+                                                                    ["data"]
+                                                                ["items"][it]
+                                                            ["item_name"]
+                                                        .toString(),
+                                                    price: map["details"]
+                                                                        ["data"]
+                                                                    ["items"]
+                                                                [it]["price"][0]
+                                                            [
+                                                            'pretty_price_after_discount']
+                                                        .toString(),
+                                                    details: map["details"]
+                                                                    ["data"]
+                                                                ["items"][it]
+                                                            ["item_description"]
+                                                        .toString(),
+                                                    discountPrice:
+                                                        map["details"]["data"][
+                                                                        "items"]
+                                                                    [
+                                                                    it]["price"]
+                                                                [0]["discount"]
+                                                            .toString(),
+                                                    discountType: map["details"]
+                                                                        ["data"]
+                                                                    ["items"]
+                                                                [it]["price"][0]
+                                                            ["discount_type"]
+                                                        .toString(),
+                                                  ),
+                                                );
+                                              }
+                                            });
+                                          });
+                                        });
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(10),
@@ -259,7 +415,9 @@ class _RestutrantFoodListScreenState extends State<RestutrantFoodListScreen> {
                                               : null,
                                         ),
                                         child: Text(
-                                          foodList[index].toString(),
+                                          foodList[index]
+                                              .categoryName
+                                              .toString(),
                                           style: TextStyle(
                                             // ignore: unnecessary_null_comparison
                                             color: _selectedIndex != null &&
@@ -286,7 +444,7 @@ class _RestutrantFoodListScreenState extends State<RestutrantFoodListScreen> {
                               left: 15, right: 15, bottom: 20),
                           child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 10,
+                            itemCount: fooditemList.length,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, index) {
                               return Padding(
@@ -301,35 +459,79 @@ class _RestutrantFoodListScreenState extends State<RestutrantFoodListScreen> {
                                     ),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(height: 10),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 5),
-                                        child: Text(
-                                          "Food Item name",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18,
-                                            color: black,
-                                          ),
+                                          horizontal: 10,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    fooditemList[index]
+                                                        .foodName
+                                                        .toString(),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 18,
+                                                      color: black,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Text(
+                                                    fooditemList[index]
+                                                        .details
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 14,
+                                                      color: black
+                                                          .withOpacity(0.4),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(height: 5),
+                                            fooditemList[index]
+                                                    .image!
+                                                    .contains('default-image')
+                                                ? Container()
+                                                : Container(
+                                                    width: 120,
+                                                    height: 70,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      image: DecorationImage(
+                                                          image: NetworkImage(
+                                                            fooditemList[index]
+                                                                .image
+                                                                .toString(),
+                                                          ),
+                                                          fit: BoxFit.cover),
+                                                    ),
+                                                  )
+                                          ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: Text(
-                                          "Food Description",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14,
-                                            color: black.withOpacity(0.4),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 20),
+                                      const SizedBox(height: 10),
                                       Padding(
                                         padding: const EdgeInsets.all(10),
                                         child: Row(
@@ -339,7 +541,9 @@ class _RestutrantFoodListScreenState extends State<RestutrantFoodListScreen> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  "26,999 \$",
+                                                  fooditemList[index]
+                                                      .price
+                                                      .toString(),
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: 14,
@@ -348,7 +552,16 @@ class _RestutrantFoodListScreenState extends State<RestutrantFoodListScreen> {
                                                 ),
                                                 const SizedBox(width: 10),
                                                 Text(
-                                                  "2 % off",
+                                                  fooditemList[index]
+                                                              .discountType
+                                                              .toString() ==
+                                                          'fixed'
+                                                      // ignore: unnecessary_string_interpolations
+                                                      ? "${fooditemList[index].discountPrice.toString()}" +
+                                                          "€"
+                                                      // ignore: unnecessary_string_interpolations
+                                                      : "${fooditemList[index].discountPrice.toString()}" +
+                                                          "%",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: 14,
